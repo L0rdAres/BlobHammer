@@ -90,7 +90,7 @@ class BlobHammerBot(commands.Bot):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ping(self, ctx):
+    async def ping(self, ctx: commands.Context):
         """Pong!"""
         before = time.perf_counter()
         msg = await ctx.send('Pon..')
