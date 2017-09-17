@@ -8,20 +8,9 @@ from typing import Union
 import discord
 from discord.ext import commands
 
-from config import token
+import config
 
 
-MOD_LOG = 289494042000228352
-BLOB_GUILD = 272885620769161216
-EXTRA_GUILDS = [
-    356869031870988309,  # blob emoji 2
-    356876866952364032,  # blob emoji 3
-    356876897403011072,  # blob emoji 4
-]
-
-# emoji
-BLOB_HAMMER = '<:blobhammer:357765371769651201>'
-BOLB = '<:bolb:357767364118315008>'
 
 
 logger = logging.getLogger('discord')
@@ -42,10 +31,10 @@ class BlobHammerBot(commands.Bot):
         self.remove_command('help')
 
     async def on_ready(self):
-        self.extra_guilds = [self.get_guild(x) for x in EXTRA_GUILDS]
+        self.extra_guilds = [self.get_guild(x) for x in config.EXTRA_GUILDS]
 
     async def on_member_ban(self, guild: discord.Guild, user: Union[discord.Member, discord.User]):
-        if guild.id != BLOB_GUILD:
+        if guild.id != config.BLOB_GUILD:
             return
 
         reason = await self.get_reason(guild, discord.AuditLogAction.ban, user)
@@ -53,11 +42,11 @@ class BlobHammerBot(commands.Bot):
         for guild in self.extra_guilds:
             await guild.ban(user, reason=reason)
 
-        mod_log = self.get_channel(MOD_LOG)
-        await mod_log.send(f'{BLOB_HAMMER} {user} (`{user.id}`) cross banned.')
+        mod_log = self.get_channel(config.MOD_LOG)
+        await mod_log.send(f'{config.BLOB_HAMMER} {user} (`{user.id}`) cross banned.')
 
     async def on_member_unban(self, guild: discord.Guild, user: discord.User):
-        if guild.id != BLOB_GUILD:
+        if guild.id != config.BLOB_GUILD:
             return
 
         reason = await self.get_reason(guild, discord.AuditLogAction.unban, user)
@@ -65,15 +54,15 @@ class BlobHammerBot(commands.Bot):
         for guild in self.extra_guilds:
             await guild.unban(user, reason=reason)
 
-        mod_log = self.get_channel(MOD_LOG)
-        await mod_log.send(f'{BOLB} {user} (`{user.id}`) cross unbanned.')
+        mod_log = self.get_channel(config.MOD_LOG)
+        await mod_log.send(f'{config.BOLB} {user} (`{user.id}`) cross unbanned.')
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def sync(self, ctx: commands.Context):
         """Sync bans."""
         async with ctx.typing():
-            blob_guild = self.get_guild(BLOB_GUILD)
+            blob_guild = self.get_guild(config.BLOB_GUILD)
             blob_bans = set(x.user for x in await blob_guild.bans())
 
             for guild in self.extra_guilds:
@@ -116,4 +105,4 @@ class BlobHammerBot(commands.Bot):
 
 
 bot = BlobHammerBot(command_prefix='!')
-bot.run(token)
+bot.run(config.token)
