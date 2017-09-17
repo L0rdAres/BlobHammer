@@ -10,9 +10,8 @@ Simple discord bot to sync bans across guilds
 Due to BlobHammer being a private bot meant for use on specified guilds
 it's not configurable within discord and can not be invited.
 
-To run your own instance edit the `MOD_LOG`, `BLOB_GUILD`,
-`EXTRA_GUILDS` ids in `run.py` and exchange the emoji used for emoji
-your bot can use.
+To run your own instance simply copy the example config and save it
+with your edits as `config.py`.
 
 The bot requires the `ban members` permission in every active guild
 and the `view audit log` permission in the main guild, which

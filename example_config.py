@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 token = ''
 
-
 MOD_LOG = 289494042000228352
 BLOB_GUILD = 272885620769161216
 EXTRA_GUILDS = [

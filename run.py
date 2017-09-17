@@ -11,8 +11,6 @@ from discord.ext import commands
 import config
 
 
-
-
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='hammer.log', encoding='utf-8', mode='a')
