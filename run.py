@@ -26,6 +26,7 @@ class BlobHammerBot(commands.Bot):
         self.add_command(self.sync)
         self.add_command(self.ping)
         self.add_command(self.update)
+        self.add_command(self.restart)
         # help is not very useful as there's only two commands, it would just disrupt chat
         self.remove_command('help')
 
@@ -99,6 +100,12 @@ class BlobHammerBot(commands.Bot):
             results = await process.communicate()
             result = ''.join(x.decode('utf-8') for x in results)
         await ctx.send(f'```{result}```')
+
+    @commands.command()
+    @commands.is_owner()
+    async def restart(self, ctx: commands.Context):
+        await ctx.send('ok')
+        await self.logout()
 
     async def get_reason(self, guild: discord.Guild, action: discord.AuditLogAction, target) -> str:
         """Get the reason an action was performed on something."""
