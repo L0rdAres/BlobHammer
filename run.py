@@ -25,6 +25,7 @@ class BlobHammerBot(commands.Bot):
         self.extra_guilds = []
         self.add_command(self.sync)
         self.add_command(self.ping)
+        self.add_command(self.update)
         # help is not very useful as there's only two commands, it would just disrupt chat
         self.remove_command('help')
 
@@ -87,6 +88,17 @@ class BlobHammerBot(commands.Bot):
         rtt = (after - before) * 1000
 
         await msg.edit(content=f'Pong! rtt {rtt:.3f}ms, ws: {ws:.3f}ms')
+
+    @commands.command()
+    @commands.is_owner()
+    async def update(self, ctx: commands.Context):
+        """Update from git."""
+        async with ctx.typing():
+            process = await asyncio.create_subprocess_shell(
+                'git pull', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+            results = await process.communicate()
+            result = ''.join(x.decode('utf-8') for x in results)
+        await ctx.send(f'```{result}```')
 
     async def get_reason(self, guild: discord.Guild, action: discord.AuditLogAction, target) -> str:
         """Get the reason an action was performed on something."""
