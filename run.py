@@ -65,7 +65,7 @@ class BlobHammerBot(commands.Bot):
 
             for guild in self.extra_guilds:
                 bans = set(x.user for x in await guild.bans())
-                diff = blob_bans.difference(bans)
+                diff = blob_bans.symmetric_difference(bans)
 
                 for ban in diff:
                     if ban in bans:
