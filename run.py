@@ -3,7 +3,6 @@ import asyncio
 import datetime
 import logging
 import time
-import traceback
 from typing import Union
 
 import discord
