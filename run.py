@@ -3,12 +3,22 @@ import asyncio
 import datetime
 import logging
 import time
+import traceback
 from typing import Union
 
 import discord
 from discord.ext import commands
 
 import config
+
+
+IGNORED_ERRORS = (
+    commands.CommandNotFound,
+    commands.CheckFailure,
+    commands.NoPrivateMessage,
+    commands.NotOwner,
+    commands.DisabledCommand,
+)
 
 
 logger = logging.getLogger('discord')
@@ -56,6 +66,16 @@ class BlobHammerBot(commands.Bot):
 
         mod_log = self.get_channel(config.MOD_LOG)
         await mod_log.send(f'{config.BOLB} {user} (`{user.id}`) cross unbanned.')
+
+    async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
+        if isinstance(error, IGNORED_ERRORS):
+            return
+
+        # get the actual error if something weird happened in a command
+        if isinstance(error, commands.CommandInvokeError):
+            error = error.original
+
+        logger.exception(f'unexpected error while running the {ctx.command} command', exc_info=error)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
