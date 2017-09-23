@@ -28,7 +28,7 @@ class Bans:
             await guild.ban(user, reason=reason)
 
         mod_log = self.bot.get_channel(config.MOD_LOG)
-        await mod_log.send(f'{config.BLOB_HAMMER} {user} (`{user.id}`) cross banned.')
+        await mod_log.send(f'{config.BLOB_HAMMER} {user} (`{user.id}`) cross banned')
 
     async def on_member_unban(self, guild: discord.Guild, user: discord.User):
         if guild.id != config.BLOB_GUILD:
@@ -40,7 +40,7 @@ class Bans:
             await guild.unban(user, reason=reason)
 
         mod_log = self.bot.get_channel(config.MOD_LOG)
-        await mod_log.send(f'{config.BOLB} {user} (`{user.id}`) cross unbanned.')
+        await mod_log.send(f'{config.BOLB} {user} (`{user.id}`) cross unbanned')
 
     async def sync(self):
         """Sync all bans from the main guild."""
