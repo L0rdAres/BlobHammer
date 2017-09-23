@@ -43,7 +43,6 @@ class Bans:
         await mod_log.send(f'{config.BOLB} {user} (`{user.id}`) cross unbanned.')
 
     async def sync(self):
-        print('syncing bans')
         blob_guild = self.bot.get_guild(config.BLOB_GUILD)
         blob_bans = set(x.user for x in await blob_guild.bans())
 

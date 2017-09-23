@@ -55,7 +55,7 @@ class BlobHammerBot(commands.Bot):
     async def sync(self, ctx: commands.Context):
         """Sync bans and roles."""
         async with ctx.typing():
-            for cog in self.cogs:
+            for cog in self.cogs.values():
                 sync = getattr(cog, 'sync', None)
                 if sync is None:
                     continue
