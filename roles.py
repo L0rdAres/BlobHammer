@@ -63,13 +63,11 @@ class Roles:
             blob_role = discord.utils.get(blob_guild.roles, id=blob_role_id)
 
             blob_members = set(x.id for x in blob_role.members)
-            print(blob_members)
 
             # guild_id: role_id pair of guilds which have this role to sync to
             for guild_id, role_id in ROLES[blob_role_id].items():
                 guild = self.bot.get_guild(guild_id)
                 role = discord.utils.get(guild.roles, id=role_id)
-                print(guild, role)
 
                 members = set(x.id for x in role.members)
                 diff = blob_members.symmetric_difference(members)
