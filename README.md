@@ -13,6 +13,6 @@ it's not configurable within discord and can not be invited.
 To run your own instance simply copy the example config and save it
 with your edits as `config.py`.
 
-The bot requires the `ban members` permission in every active guild
-and the `view audit log` permission in the main guild, which
-'dispatches' the bans to the others.
+The bot requires the `ban members` and `manage roles` permission in
+every active guild and the `view audit log` permission in the main
+guild, which 'dispatches' the bans and role edits to the others.
