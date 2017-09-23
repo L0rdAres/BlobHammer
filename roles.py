@@ -84,6 +84,21 @@ class Roles:
                     else:
                         await member.remove_roles(role, reason='sync - user no longer has role in main guild')
 
+    @commands.command()
+    @commands.is_owner()
+    async def roles(self, ctx: commands.Context, guild_id: int):
+        """shows all role ids for a guild."""
+        guild = self.bot.get_guild(guild_id)
+        if guild is None:
+            return await ctx.send('Can\'t find guild, please try again!')
+
+        roles = []
+        for role in guild.role_hierarchy:
+            roles.append(f'{role.id} - {role.name}')
+
+        result = '\n'.join(roles)
+        await ctx.send(f'```\n{result}```')
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Roles(bot))
