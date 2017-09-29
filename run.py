@@ -33,7 +33,8 @@ class BlobHammerBot(commands.Bot):
         self.add_command(self.ping)
         self.add_command(self.update)
         self.add_command(self.restart)
-        # help is not very useful as there's only two public commands, it would just disrupt chat
+        self.add_command(self.hammer)
+        # help is not very useful as there's only three public commands, it would just disrupt chat
         self.remove_command('help')
 
         # load the extensions which do the magic
