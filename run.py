@@ -77,6 +77,10 @@ class BlobHammerBot(commands.Bot):
         await msg.edit(content=f'Pong! rtt {rtt:.3f}ms, ws: {ws:.3f}ms')
 
     @commands.command()
+    async def hammer(self, ctx):
+        await ctx.send("<:blobhammer:357765371769651201>")
+
+    @commands.command()
     @commands.is_owner()
     async def update(self, ctx: commands.Context):
         """Update from git."""
