@@ -40,6 +40,7 @@ class BlobHammerBot(commands.Bot):
         # load the extensions which do the magic
         self.load_extension('bans')
         self.load_extension('roles')
+        self.load_extension('logs')
 
     async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
         if isinstance(error, IGNORED_ERRORS):

@@ -15,13 +15,26 @@ EXTRA_GUILDS = [
     356876897403011072,  # blob emoji 4
 ]
 
-# roles to sync
+# roles to sync across guilds
 ROLES = {
-    # role ID in main guild, guild ID, role ID in that guild
-    294928463536586754: {288369367769677826: 310870481479794691}
-    # the inner dict can have more guild: role pairs
+    # role_id in main (BLOB_GUILD) guild
+    294928463536586754: [
+        # guild_id: role_id pairs
+        {288369367769677826: 310870481479794691},
+        {304383757975289857: 344293286652936212}
+    ],
+}
+
+# mod logs which can be set up in each guild
+# currently only shows joins and leaves
+MINI_MOD_LOGS = {
+    # guild_id: channel_id pairs
+    272885620769161216: 364202355001917453,
 }
 
 # emoji
 BLOB_HAMMER = '<:blobhammer:357765371769651201>'
 BOLB = '<:bolb:357767364118315008>'
+
+YES = '<:yes:344892554887692290>'
+NO = '<:no:344892555063853056>'
