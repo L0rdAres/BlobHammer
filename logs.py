@@ -66,7 +66,7 @@ class Logs:
         channel = self.bot.get_channel(channel_id)
 
         now = datetime.datetime.utcnow()
-        delta = (now - member.created_at).total_seconds()
+        delta = (now - member.joined_at).total_seconds()
 
         join_delta = human_delta(delta)
 
