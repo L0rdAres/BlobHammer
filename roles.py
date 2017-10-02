@@ -2,7 +2,9 @@
 import discord
 from discord.ext import commands
 
-from config import BLOB_GUILD, ROLES
+from config import BLOB_GUILD, ROLES, MOD_LOG
+
+# todo: add failure logging to role sync in member join/update
 
 
 class Roles:
@@ -58,6 +60,7 @@ class Roles:
     async def sync(self):
         """Syncs all roles from the main guild."""
         blob_guild = self.bot.get_guild(BLOB_GUILD)
+        main_mod_log = self.bot.get_channel(MOD_LOG)
 
         for blob_role_id in ROLES:
             blob_role = discord.utils.get(blob_guild.roles, id=blob_role_id)
@@ -65,22 +68,25 @@ class Roles:
             blob_members = set(x.id for x in blob_role.members)
 
             # guild_id: role_id pair of guilds which have this role to sync to
-            for guild_id, role_id in ROLES[blob_role_id].items():
+            for guild_id, role_id in ROLES[blob_role_id]:
                 guild = self.bot.get_guild(guild_id)
                 role = discord.utils.get(guild.roles, id=role_id)
 
                 members = set(x.id for x in role.members)
                 diff = blob_members.symmetric_difference(members)
 
-                for user_id in diff:
-                    member = guild.get_member(user_id)
-                    if member is None:
-                        continue
+                try:
+                    for user_id in diff:
+                        member = guild.get_member(user_id)
+                        if member is None:
+                            continue
 
-                    if user_id in blob_members:
-                        await member.add_roles(role, reason='sync - user has role in main guild')
-                    else:
-                        await member.remove_roles(role, reason='sync - user no longer has role in main guild')
+                        if user_id in blob_members:
+                            await member.add_roles(role, reason='sync - user has role in main guild')
+                        else:
+                            await member.remove_roles(role, reason='sync - user no longer has role in main guild')
+                except discord.HTTPException:
+                    await main_mod_log.send(f'Failed to sync roles in {guild.name} {guild.id}.')
 
     @commands.command()
     @commands.is_owner()

@@ -23,11 +23,14 @@ class Bans:
             return
 
         reason = await self.get_reason(guild, discord.AuditLogAction.ban, user)
+        mod_log = self.bot.get_channel(config.MOD_LOG)
 
         for guild in self.extra_guilds:
-            await guild.ban(user, reason=reason)
+            try:
+                await guild.ban(user, reason=reason)
+            except discord.HTTPException:
+                await mod_log.send(f'Failed to ban in {guild.name} {guild.id}.')
 
-        mod_log = self.bot.get_channel(config.MOD_LOG)
         await mod_log.send(f'{config.BLOB_HAMMER} {user} (`{user.id}`) cross banned')
 
     async def on_member_unban(self, guild: discord.Guild, user: discord.User):
@@ -35,11 +38,14 @@ class Bans:
             return
 
         reason = await self.get_reason(guild, discord.AuditLogAction.unban, user)
+        mod_log = self.bot.get_channel(config.MOD_LOG)
 
         for guild in self.extra_guilds:
-            await guild.unban(user, reason=reason)
+            try:
+                await guild.unban(user, reason=reason)
+            except discord.HTTPException:
+                await mod_log.send(f'Failed to unban in {guild.name} {guild.id}.')
 
-        mod_log = self.bot.get_channel(config.MOD_LOG)
         await mod_log.send(f'{config.BOLB} {user} (`{user.id}`) cross unbanned')
 
     async def sync(self):
@@ -47,15 +53,20 @@ class Bans:
         blob_guild = self.bot.get_guild(config.BLOB_GUILD)
         blob_bans = set(x.user for x in await blob_guild.bans())
 
+        main_mod_log = self.bot.get_channel(config.MOD_LOG)
+
         for guild in self.extra_guilds:
             bans = set(x.user for x in await guild.bans())
             diff = blob_bans.symmetric_difference(bans)
 
-            for ban in diff:
-                if ban in bans:
-                    await guild.unban(ban, reason='sync - user not banned on main guild')
-                else:
-                    await guild.ban(ban, reason='sync - user banned on main guild')
+            try:
+                for ban in diff:
+                    if ban in bans:
+                        await guild.unban(ban, reason='sync - user not banned on main guild')
+                    else:
+                        await guild.ban(ban, reason='sync - user banned on main guild')
+            except discord.HTTPException:
+                await main_mod_log.send(f'Failed to sync bans in {guild.name} {guild.id}.')
 
     async def get_reason(self, guild: discord.Guild, action: discord.AuditLogAction, target) -> str:
         """Get the reason an action was performed on something."""
