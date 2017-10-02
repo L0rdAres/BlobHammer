@@ -72,7 +72,7 @@ class Logs:
 
         if len(member.roles) > 1:
             roles = ', '.join((x.name for x in member.roles if not x.is_default()))
-            roles = f'; roles: {roles}'
+            roles = f'; roles: `{roles}`'
         else:
             roles = ''
 
