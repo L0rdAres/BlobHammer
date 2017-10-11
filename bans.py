@@ -14,6 +14,7 @@ class Bans:
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.extra_guilds = []
 
     async def on_ready(self):
         self.extra_guilds = [self.bot.get_guild(x) for x in config.EXTRA_GUILDS]
