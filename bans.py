@@ -30,6 +30,8 @@ class Bans:
                 await guild.ban(user, reason=reason)
             except discord.HTTPException:
                 await mod_log.send(f'Failed to ban in {guild.name} {guild.id}.')
+            except Exception as e:
+                await mod_log.send(f'Failed to sync ban in {guild}: `{e.__class__.__name__} {e}`')
 
         await mod_log.send(f'{config.BLOB_HAMMER} {user} (`{user.id}`) cross banned')
 
@@ -45,6 +47,8 @@ class Bans:
                 await guild.unban(user, reason=reason)
             except discord.HTTPException:
                 await mod_log.send(f'Failed to unban in {guild.name} {guild.id}.')
+            except Exception as e:
+                await mod_log.send(f'Failed to sync unban in {guild}: `{e.__class__.__name__} {e}`')
 
         await mod_log.send(f'{config.BOLB} {user} (`{user.id}`) cross unbanned')
 
@@ -67,6 +71,8 @@ class Bans:
                         await guild.ban(ban, reason='sync - user banned on main guild')
             except discord.HTTPException:
                 await main_mod_log.send(f'Failed to sync bans in {guild.name} {guild.id}.')
+            except Exception as e:
+                await main_mod_log.send(f'Failed to sync bans in {guild}: `{e.__class__.__name__} {e}`')
 
     async def get_reason(self, guild: discord.Guild, action: discord.AuditLogAction, target) -> str:
         """Get the reason an action was performed on something."""
