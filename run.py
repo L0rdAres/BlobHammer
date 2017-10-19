@@ -33,7 +33,6 @@ class BlobHammerBot(commands.Bot):
         self.add_command(self.ping)
         self.add_command(self.update)
         self.add_command(self.restart)
-        self.add_command(self.hammer)
         # help is not very useful as there's only three public commands, it would just disrupt chat
         self.remove_command('help')
 
@@ -77,10 +76,6 @@ class BlobHammerBot(commands.Bot):
         rtt = (after - before) * 1000
 
         await msg.edit(content=f'Pong! rtt {rtt:.3f}ms, ws: {ws:.3f}ms')
-
-    @commands.command()
-    async def hammer(self, ctx):
-        await ctx.send("<:blobhammer:357765371769651201>")
 
     @commands.command()
     @commands.is_owner()
