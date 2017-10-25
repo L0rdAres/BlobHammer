@@ -31,6 +31,8 @@ class Bans:
                 await guild.ban(user, reason=reason)
             except discord.HTTPException:
                 await mod_log.send(f'Failed to ban in {guild.name} {guild.id}.')
+            except AttributeError:
+                await mod_log.send(f'im not in a guild with id {guild.id}, or i dont have ban powers there.')
             except Exception as e:
                 await mod_log.send(f'Failed to sync ban in {guild}: `{e.__class__.__name__} {e}`')
 
